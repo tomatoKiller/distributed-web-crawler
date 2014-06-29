@@ -13,8 +13,9 @@ import java.io.IOException;
 public class url_data implements WritableComparable<url_data> {
 
     private byte status;
-//    private String url;   //由于在key值中已经有了url了，因此url_data中不在需要一个重复的url，可以节省空间
-    private Long lastFetchTime;
+//    private String url;   //由于在key值中已经有了url了，因此url_data中不再需要一个重复的url，可以节省空间
+    private long lastFetchTime;  //最后抓取时间
+    private long fetchInterval;  //对应url的抓取间隔
 
     /** Page was not fetched yet. */
     public static final byte STATUS_DB_UNFETCHED      = 0x01;
@@ -60,6 +61,7 @@ public class url_data implements WritableComparable<url_data> {
     public url_data(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
+        this.fetchInterval = ul.fetchInterval;
     }
 
     public url_data(byte status) {
@@ -70,6 +72,7 @@ public class url_data implements WritableComparable<url_data> {
     public void set(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
+        this.fetchInterval = ul.fetchInterval;
     }
 
     public void setStatus(byte status) {
