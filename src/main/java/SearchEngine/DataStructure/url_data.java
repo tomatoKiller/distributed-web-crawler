@@ -58,10 +58,15 @@ public class url_data implements WritableComparable<url_data> {
 
     public url_data(){}
 
+    public long getFetchInterval() {
+        return fetchInterval;
+    }
+
     public url_data(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
         this.fetchInterval = ul.fetchInterval;
+
     }
 
     public url_data(byte status) {

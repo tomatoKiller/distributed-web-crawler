@@ -20,9 +20,9 @@ import java.io.IOException;
  */
 public class InjectorDriven{
 
-    public static void inject() throws IOException {
+    public static boolean inject() throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
-        Job job = new Job(conf, "SearchEngine");
+        Job job = new Job(conf, "Injector");
 
         String currentPath = System.getProperty("user.dir");
 
@@ -35,6 +35,7 @@ public class InjectorDriven{
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
+        // /SearchEngine/inject 作为Injector模块的输出，Generate模块的输入
         Path InjectorOutput = new Path("/SearchEngine/inject");
 
         //在下次迭代中，在执行job前要先删除上次产生的输出
@@ -47,6 +48,9 @@ public class InjectorDriven{
         job.setMapperClass(InjectorMap.class);
         //尚未发现reduce在此处的用处，是否可以采用默认设置？
         job.setReducerClass(InjectorReduce.class);
+
+        //返回执行结果的状态
+        return job.waitForCompletion(true);
 
     }
 
