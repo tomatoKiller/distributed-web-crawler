@@ -15,14 +15,14 @@ public class GenerateMap extends Mapper<Text, url_data, Text, url_data> {
     @Override
     protected void map(Text key, url_data value, Context context) throws IOException, InterruptedException {
         if (value.getStatus() == url_data.STATUS_DB_UNFETCHED) {
-            value.setLastFetchTime(System.currentTimeMillis());
+//            value.setLastFetchTime(System.currentTimeMillis());
             context.write(key, value);
         }
         else if (value.getStatus() == url_data.STATUS_DB_FETCHED) {
             long updatetime = value.getLastFetchTime() + value.getFetchInterval();
             if (updatetime < System.currentTimeMillis()) {
                 value.setStatus(url_data.STATUS_DB_UNFETCHED);
-                value.setLastFetchTime(System.currentTimeMillis());
+//                value.setLastFetchTime(System.currentTimeMillis());
                 context.write(key, value);
             }
         }

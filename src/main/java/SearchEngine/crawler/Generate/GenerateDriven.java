@@ -23,7 +23,7 @@ public class GenerateDriven {
         Job job = new Job(conf, "Generate");
 
         // /SearchEngine/inject 作为Injector模块的输出，Generate模块的输入
-        FileInputFormat.addInputPath(job, new Path("/SearchEngine/inject"));
+        FileInputFormat.addInputPath(job, new Path("/SearchEngine/CrawlDB"));
 
         Path GenerateOutput = new Path("/SearchEngine/fetchList");
         if (FileSystem.get(conf).exists(GenerateOutput)) {

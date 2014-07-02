@@ -36,7 +36,7 @@ public class InjectorDriven{
         job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
         // /SearchEngine/inject 作为Injector模块的输出，Generate模块的输入
-        Path InjectorOutput = new Path("/SearchEngine/inject");
+        Path InjectorOutput = new Path("/SearchEngine/CrawlDB");
 
         //在下次迭代中，在执行job前要先删除上次产生的输出
         if (FileSystem.get(conf).exists(InjectorOutput)) {
