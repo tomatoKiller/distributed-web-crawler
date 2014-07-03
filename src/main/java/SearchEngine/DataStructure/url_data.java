@@ -1,5 +1,6 @@
 package SearchEngine.DataStructure;
 
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
@@ -15,7 +16,16 @@ public class url_data implements WritableComparable<url_data> {
     private byte status;
 //    private String url;   //由于在key值中已经有了url了，因此url_data中不再需要一个重复的url，可以节省空间
     private long lastFetchTime;  //最后抓取时间
-    private long fetchInterval;  //对应url的抓取间隔
+//    private long fetchInterval;  //对应url的抓取间隔
+    private Text content;
+
+    public Text getContent() {
+        return content;
+    }
+
+    public void setContent(Text content) {
+        this.content = content;
+    }
 
     /** Page was not fetched yet. */
     public static final byte STATUS_DB_UNFETCHED      = 0x01;
@@ -41,8 +51,8 @@ public class url_data implements WritableComparable<url_data> {
     public static final byte STATUS_FETCH_REDIR_TEMP  = 0x23;
     /** Fetching permanently redirected to other page. */
     public static final byte STATUS_FETCH_REDIR_PERM  = 0x24;
-    /** Fetching unsuccessful - page is gone. */
-    public static final byte STATUS_FETCH_GONE        = 0x25;
+    /** Fetching unsuccessful - some error happened. */
+    public static final byte STATUS_FETCH_ERROR       = 0x25;
     /** Fetching successful - page is not modified. */
     public static final byte STATUS_FETCH_NOTMODIFIED = 0x26;
 
@@ -58,14 +68,15 @@ public class url_data implements WritableComparable<url_data> {
 
     public url_data(){}
 
-    public long getFetchInterval() {
-        return fetchInterval;
-    }
+//    public long getFetchInterval() {
+//        return fetchInterval;
+//    }
 
     public url_data(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
-        this.fetchInterval = ul.fetchInterval;
+//        this.fetchInterval = ul.fetchInterval;
+        this.content = ul.content;
 
     }
 
@@ -77,7 +88,7 @@ public class url_data implements WritableComparable<url_data> {
     public void set(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
-        this.fetchInterval = ul.fetchInterval;
+//        this.fetchInterval = ul.fetchInterval;
     }
 
     public void setStatus(byte status) {
@@ -115,6 +126,7 @@ public class url_data implements WritableComparable<url_data> {
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeByte(status);
         dataOutput.writeLong(lastFetchTime);
+        content.write(dataOutput);
 
     }
 
@@ -122,5 +134,6 @@ public class url_data implements WritableComparable<url_data> {
     public void readFields(DataInput dataInput) throws IOException {
         this.status = dataInput.readByte();
         this.lastFetchTime = dataInput.readLong();
+        content.readFields(dataInput);
     }
 }

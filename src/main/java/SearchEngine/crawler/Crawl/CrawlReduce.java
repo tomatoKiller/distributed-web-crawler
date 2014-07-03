@@ -1,12 +1,8 @@
 package SearchEngine.crawler.Crawl;
 
 import SearchEngine.DataStructure.DocumentWritable;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+import SearchEngine.Fetch.RetrievePage;
 import org.apache.hadoop.io.BooleanWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
