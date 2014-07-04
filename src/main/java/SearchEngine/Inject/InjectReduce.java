@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * Created by wu on 2014/7/3.
  */
+
 public class InjectReduce extends Reducer<Text, url_data, Text, url_data> {
 
     @Override
