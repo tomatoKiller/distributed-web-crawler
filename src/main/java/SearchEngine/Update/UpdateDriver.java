@@ -1,6 +1,7 @@
 package SearchEngine.Update;
 
 import SearchEngine.DataStructure.url_data;
+import SearchEngine.Generate.GenerateCombine;
 import SearchEngine.Generate.GenerateMap;
 import SearchEngine.Generate.GenerateReduce;
 import org.apache.hadoop.conf.Configuration;
@@ -27,6 +28,7 @@ public class UpdateDriver {
         job.setJarByClass(UpdateDriver.class);
 
         job.setMapperClass(UpdateMap.class);
+        job.setCombinerClass(GenerateCombine.class);
         job.setReducerClass(UpdateReduce.class);
 
         job.setMapOutputKeyClass(Text.class);
