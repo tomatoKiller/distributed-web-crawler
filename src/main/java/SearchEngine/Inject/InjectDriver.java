@@ -2,6 +2,7 @@ package SearchEngine.Inject;
 
 import SearchEngine.DataStructure.url_data;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -34,6 +35,9 @@ public class InjectDriver {
         job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
         FileInputFormat.addInputPath(job, new Path("/EngineSearch/InjectorInput"));
+
+        if (FileSystem.get(conf).exists(new Path("/EngineSearch/CrawlDB/Round1")))
+            FileSystem.get(conf).delete(new Path("/EngineSearch/CrawlDB/Round1"), true);
         FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/CrawlDB/Round1"));
 
         job.waitForCompletion(true);
