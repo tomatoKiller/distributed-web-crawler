@@ -36,11 +36,15 @@ public class InjectDriver {
 
         FileInputFormat.addInputPath(job, new Path("/EngineSearch/InjectorInput"));
 
-        if (FileSystem.get(conf).exists(new Path("/EngineSearch/CrawlDB/Round1")))
-            FileSystem.get(conf).delete(new Path("/EngineSearch/CrawlDB/Round1"), true);
-        FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/CrawlDB/Round1"));
+        if (FileSystem.get(conf).exists(new Path("/EngineSearch/CrawlDB/Round0")))
+            FileSystem.get(conf).delete(new Path("/EngineSearch/CrawlDB/Round0"), true);
 
-        job.waitForCompletion(true);
+        if (!FileSystem.get(conf).exists(new Path("/EngineSearch/CrawlDB")))
+            FileSystem.get(conf).mkdirs(new Path("/EngineSearch/CrawlDB"));
+
+        FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/CrawlDB/Round0"));
+
+//        job.waitForCompletion(true);
 
         return job;
 

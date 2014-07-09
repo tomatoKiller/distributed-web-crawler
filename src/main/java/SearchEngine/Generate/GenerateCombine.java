@@ -16,14 +16,13 @@ public class GenerateCombine extends Reducer<Text, url_data, Text, url_data> {
 
         url_data data = new url_data();
         for (url_data u : values) {
+            data.set(u);
             if (u.getStatus() == url_data.STATUS_DB_FETCHED || u.getStatus() == url_data.STATUS_FETCH_ERROR){
-                data.set(u);
                 context.write(key, data);
                 return;
             }
         }
 
-        data.set(values.iterator().next());
         data.setStatus(url_data.STATUS_DB_UNFETCHED);
         context.write(key, data);
     }

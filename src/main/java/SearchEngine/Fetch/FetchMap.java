@@ -19,16 +19,18 @@ public class FetchMap extends Mapper<Text, url_data, Text, url_data> {
         //下载url对应的网页
         //此处应采用多线程。。。。。。。。。。。。。。。。
         RetrievePage tool = new RetrievePage(url);
+        url_data data = new url_data();
+
         if (tool.downloadPage()) {
             Text content = new Text(tool.getContent());
-            value.setContent(content);
-            value.setLastFetchTime(System.currentTimeMillis());
-            value.setStatus(url_data.STATUS_DB_FETCHED);
-            context.write(key, value);
+            data.setContent(content);
+            data.setLastFetchTime(System.currentTimeMillis());
+            data.setStatus(url_data.STATUS_DB_FETCHED);
+            context.write(key, data);
         } else { //如果抓取失败，则放弃抓取，并将url标记为已抓取，防止在此抓取
-            value.setLastFetchTime(System.currentTimeMillis());
-            value.setStatus(url_data.STATUS_FETCH_ERROR);
-            context.write(key, value);
+            data.setLastFetchTime(System.currentTimeMillis());
+            data.setStatus(url_data.STATUS_FETCH_ERROR);
+            context.write(key, data);
         }
     }
 }

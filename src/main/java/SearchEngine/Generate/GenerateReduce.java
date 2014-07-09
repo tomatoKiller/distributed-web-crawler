@@ -14,12 +14,14 @@ public class GenerateReduce extends Reducer<Text, url_data, Text, url_data> {
     @Override
     protected void reduce(Text key, Iterable<url_data> values, Context context) throws IOException, InterruptedException {
 
+        url_data data = new url_data();
         for (url_data u : values) {
             if (u.getStatus() == url_data.STATUS_DB_FETCHED){
                 return;
             }
+            data.set(u);
         }
 
-        context.write(key, values.iterator().next());
+        context.write(key, data);
     }
 }

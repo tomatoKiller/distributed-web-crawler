@@ -1,8 +1,6 @@
 package SearchEngine.Generate;
 
 import SearchEngine.DataStructure.url_data;
-import SearchEngine.Inject.InjectMap;
-import SearchEngine.Inject.InjectReduce;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,6 +25,7 @@ public class GenerateDriver {
         job.setJarByClass(GenerateDriver.class);
 
         job.setMapperClass(GenerateMap.class);
+        job.setCombinerClass(GenerateCombine.class);
         job.setReducerClass(GenerateReduce.class);
 
         job.setMapOutputKeyClass(Text.class);
@@ -42,9 +41,10 @@ public class GenerateDriver {
 
         if (FileSystem.get(conf).exists(new Path("/EngineSearch/Fetchlist")))
             FileSystem.get(conf).delete(new Path("/EngineSearch/Fetchlist"), true);
+
         FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/Fetchlist"));
 
-        job.waitForCompletion(true);
+//        job.waitForCompletion(true);
 
         return job;
 

@@ -66,7 +66,9 @@ public class url_data implements WritableComparable<url_data> {
     /** Page discovered through a link. */
     public static final byte STATUS_LINKED            = 0x43;
 
-    public url_data(){}
+    public url_data() {
+        content = new Text("");
+    }
 
 //    public long getFetchInterval() {
 //        return fetchInterval;
@@ -88,6 +90,7 @@ public class url_data implements WritableComparable<url_data> {
     public void set(url_data ul) {
         this.status = ul.status;
         this.lastFetchTime = ul.lastFetchTime;
+        this.content = ul.content;
 //        this.fetchInterval = ul.fetchInterval;
     }
 

@@ -23,18 +23,27 @@ public class JobDriver {
 
         Configuration conf = new Configuration();
 
-        int depth = conf.getInt("depth", 10);
+        int depth = conf.getInt("depth", 2);
 
-        JobControl jobcntl = new JobControl("Crawler");
-
-        ControlledJob inject = new ControlledJob(conf);
-        inject.setJob(InjectDriver.Inject());
+//        InjectDriver.Inject().waitForCompletion(true);
+//        GenerateDriver.Generate(0).waitForCompletion(true);
+//        FetchDriver.Fetch(0).waitForCompletion(true);
+//        UpdateDriver.Update(0).waitForCompletion(true);
 
         while (round < depth) {
 
+            JobControl jobcntl = new JobControl("Crawler");
+
             ControlledJob generate = new ControlledJob(conf);
             generate.setJob(GenerateDriver.Generate(round));
-            generate.addDependingJob(inject);
+
+            if (round == 0) {
+                ControlledJob inject = new ControlledJob(conf);
+                inject.setJob(InjectDriver.Inject());
+                jobcntl.addJob(inject);
+
+                generate.addDependingJob(inject);
+            }
 
             ControlledJob fetch = new ControlledJob(conf);
             fetch.setJob(FetchDriver.Fetch(round));
@@ -44,7 +53,7 @@ public class JobDriver {
             update.setJob(UpdateDriver.Update(round));
             update.addDependingJob(fetch);
 
-            jobcntl.addJob(inject);
+
             jobcntl.addJob(generate);
             jobcntl.addJob(fetch);
             jobcntl.addJob(update);
@@ -62,6 +71,7 @@ public class JobDriver {
             }
 
             ++round;
+
 
         }
     }

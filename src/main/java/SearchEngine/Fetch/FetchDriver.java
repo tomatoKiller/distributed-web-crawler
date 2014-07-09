@@ -23,7 +23,7 @@ public class FetchDriver {
     public static Job Fetch(int r) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
 
-        Job job = new Job(conf, "Generate");
+        Job job = new Job(conf, "Fetch");
 
         job.setJarByClass(FetchDriver.class);
 
@@ -46,13 +46,19 @@ public class FetchDriver {
 //            FileSystem.get(conf).delete(new Path("/EngineSearch/CrawlDB/FetchOut/Segment" + r), true);
 
         //设置默认的输出路径
+        if (!FileSystem.get(conf).exists(new Path("/EngineSearch/UrlData/FetchOut")))
+            FileSystem.get(conf).mkdirs(new Path("/EngineSearch/UrlData/FetchOut"));
+
+        if (FileSystem.get(conf).exists(new Path("/EngineSearch/UrlData/FetchOut/Segment" + r)))
+            FileSystem.get(conf).delete(new Path("/EngineSearch/UrlData/FetchOut/Segment" + r), true);
+
         FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/UrlData/FetchOut/Segment" + r));
 
         MultipleOutputs.addNamedOutput(job, "newUrl", SequenceFileOutputFormat.class, Text.class, url_data.class);
         MultipleOutputs.addNamedOutput(job, "Content", SequenceFileOutputFormat.class, Text.class, url_data.class);
 
 
-        job.waitForCompletion(true);
+//        job.waitForCompletion(true);
 
         return job;
 

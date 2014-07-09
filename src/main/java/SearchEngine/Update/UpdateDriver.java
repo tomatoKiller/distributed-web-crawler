@@ -23,7 +23,7 @@ public class UpdateDriver {
     public static Job Update(int r) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration conf = new Configuration();
 
-        Job job = new Job(conf, "Generate");
+        Job job = new Job(conf, "Update");
 
         job.setJarByClass(UpdateDriver.class);
 
@@ -40,13 +40,13 @@ public class UpdateDriver {
         job.setInputFormatClass(SequenceFileInputFormat.class);
         job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
-        FileInputFormat.addInputPath(job, new Path("/EngineSearch/FetchOut/Segment" + r + "/newUrl"));
+        FileInputFormat.addInputPath(job, new Path("/EngineSearch/UrlData/FetchOut/Segment" + r + "/newUrl"));
 
         if (FileSystem.get(conf).exists(new Path("/EngineSearch/CrawlDB/Round" + (r + 1))))
             FileSystem.get(conf).delete(new Path("/EngineSearch/CrawlDB/Round" + (r + 1)), true);
         FileOutputFormat.setOutputPath(job, new Path("/EngineSearch/CrawlDB/Round" + (r + 1)));
 
-        job.waitForCompletion(true);
+//        job.waitForCompletion(true);
 
         return job;
 
