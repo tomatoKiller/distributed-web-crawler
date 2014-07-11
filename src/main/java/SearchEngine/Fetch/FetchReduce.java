@@ -38,21 +38,34 @@ public class FetchReduce extends Reducer<Text, url_data, Text, url_data> {
 
         LinkedList<String> urlList = new LinkedList<String>();
 
-        for (url_data u : values) {
+            url_data dat = new url_data();
+            dat.set(values.iterator().next());
 
-            url_data data = new url_data();
-            data.set(u);
-
-            urlList = RetrievePage.findUrl(key.toString(), data.getContent().toString());
+            urlList = RetrievePage.findUrl(key.toString(), dat.getContent().toString());
 
             //将url对应的网页内容写入content 文件夹 ,实际上写的是url_data 结构
-            nu.write("Content", key, data, "Content/" + getMD5(key.toString().getBytes()) + "/");
+            nu.write("Content", key, dat, "Content/" + getMD5(key.toString().getBytes()) + "/");
 
             //将key中url的内容清空，并和其他新生成的url一起放入crawlDB中，供下一轮使用
-            data.setContent(new Text(""));
-            nu.write("newUrl", key, data, "newUrl/");
-            break;
-        }
+            dat.setContent(new Text(""));
+            nu.write("newUrl", key, dat, "newUrl/");
+
+
+//        for (url_data u : values) {
+//
+//            url_data data = new url_data();
+//            data.set(u);
+//
+//            urlList = RetrievePage.findUrl(key.toString(), data.getContent().toString());
+//
+//            //将url对应的网页内容写入content 文件夹 ,实际上写的是url_data 结构
+//            nu.write("Content", key, data, "Content/" + getMD5(key.toString().getBytes()) + "/");
+//
+//            //将key中url的内容清空，并和其他新生成的url一起放入crawlDB中，供下一轮使用
+//            data.setContent(new Text(""));
+//            nu.write("newUrl", key, data, "newUrl/");
+//            break;
+//        }
 
         for (String u : urlList) {
             url_data data = new url_data();
