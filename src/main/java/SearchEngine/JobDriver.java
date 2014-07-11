@@ -4,9 +4,13 @@ import SearchEngine.Fetch.FetchDriver;
 import SearchEngine.Generate.GenerateDriver;
 import SearchEngine.Inject.InjectDriver;
 import SearchEngine.Update.UpdateDriver;
+import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 
@@ -16,14 +20,22 @@ import java.io.IOException;
 
 
 
-public class JobDriver {
+public class JobDriver extends Configured implements Tool{
 
     public static void main(String[] args) throws Exception {
+        int res = ToolRunner.run(new Configuration(), new JobDriver(), args);
+        System.exit(res);
+
+    }
+
+    @Override
+    public int run(String[] args) throws Exception {
         int round = 0;
 
-        Configuration conf = new Configuration();
+        Configuration conf = getConf();
 
-        int depth = conf.getInt("depth", 2);
+        // args[0] : iteration depth
+        int depth = Integer.parseInt(args[0]);
 
 //        InjectDriver.Inject().waitForCompletion(true);
 //        GenerateDriver.Generate(0).waitForCompletion(true);
@@ -72,8 +84,8 @@ public class JobDriver {
 
             ++round;
 
-
         }
-    }
 
+        return 0;
+    }
 }
